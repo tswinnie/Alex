@@ -1,0 +1,132 @@
+/**
+ * Copyright 2003 Sun Microsystems, Inc.
+ * 
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * WARRANTIES.
+ */
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
+
+/**
+ * Simple program to demonstrate the use of the FreeTTS speech
+ * synthesizer.  This simple program shows how to use FreeTTS
+ * without requiring the Java Speech API (JSAPI).
+ */
+public class FreeTTSHelloWorld {
+
+    /**
+     * Example of how to list all the known voices.
+     */
+    public static void listAllVoices() {
+        System.out.println();
+        System.out.println("All voices available:");        
+        VoiceManager voiceManager = VoiceManager.getInstance();
+        Voice[] voices = voiceManager.getVoices();
+        for (int i = 0; i < voices.length; i++) {
+            System.out.println("    " + voices[i].getName()
+                               + " (" + voices[i].getDomain() + " domain)");
+        }
+    }
+
+    public static void main(String[] args) {
+
+        listAllVoices();
+        
+        String voiceName = (args.length > 0)
+            ? args[0]
+            : "kevin16";
+        
+        System.out.println();
+        System.out.println("Using voice: " + voiceName);
+        
+        /* The VoiceManager manages all the voices for FreeTTS.
+         */
+        VoiceManager voiceManager = VoiceManager.getInstance();
+        Voice helloVoice = voiceManager.getVoice(voiceName);
+
+        if (helloVoice == null) {
+            System.err.println(
+                "Cannot find a voice named "
+                + voiceName + ".  Please specify a different voice.");
+            System.exit(1);
+        }
+        
+        /* Allocates the resources for the voice.
+         */
+        helloVoice.allocate();
+        
+        /* Synthesize speech.
+         */
+        helloVoice.speak("A murmur runs through the crowd; the various idlers grow alert; all eyes are suddenly turned to the south. And there, far away over the green headland, a small tuft of brown smoke appears, rising into the golden glow of the afternoon, and we know that by and by we shall see the great steamer with her scarlet funnels come sailing round the point. The Laird of Denny-mains assumes an air of still further importance; he pulls his frock-coat tight at the waist; he adjusts his black satin necktie; his tall, white, stiff collar seems more rigid and white than ever. He has heard of the wonderful stranger; and he knows that now she is drawing near.
+Heard of her? He has heard of nothing else since ever he came to us in these northern wilds. For the mistress of this household—with all her domineering ways and her fits of majestic temper—has a love for her intimate girl-friends far passing the love of men; especially when the young ladies are obedient, and gentle, and ready to pay to her matronly dignity the compliment of a respectful awe. And this particular friend who is now coming to us: what has not the Laird heard about her during these past few days?—of her high courage, her resolute unselfishness, her splendid cheerfulness? "A singing-bird in the house," that was one of the phrases used, "in wet weather or fine." And then the enthusiastic friend muddled her metaphors somehow, and gave the puzzled Laird to understand that the presence of this young lady in a house was like having sweet-brier about the rooms. No wonder he put on his highest and stiffest collar before he marched grandly down with us to the quay.
+"And does she not deserve a long holiday sir?" says the Laird's hostess to him, as together they watch for the steamer coming round the point. "Just fancy! Two months' attendance on that old woman, who was her mother's nurse. Two months in a sick-room, without a soul to break the monotony of it. And the girl living in a strange town all by herself!"
+"Ay; and in such a town as Edinburgh," remarks the Laird, with great compassion. His own property lies just outside Glasgow.
+"Dear me," says he, "what must a young English leddy have thought of our Scotch way of speech when she heard they poor Edinburgh bodies and their yaumering sing-song? Not that I quarrel with any people for having an accent in their way of speaking; they have that in all parts of England as well as in Scotland—in Yorkshire, and Somersetshire, and what not; and even in London itself there is a way of speech that is quite recognisable to a stranger. But I have often thought that there was less trace of accent about Glesca and the west of Scotland than in any other part; in fact, ah have often been taken for an Englishman maself."
+"Indeed!" says this gentle creature standing by him; and her upturned eyes are full of an innocent belief. You would swear she was meditating on summoning instantly her boys from Epsom College that they might acquire a pure accent—or get rid of all accent—on the banks of the Clyde.
+"Yes," say the Laird, with a decision almost amounting to enthusiasm, "it is a grand inheritance that we in the south of Scotland are preserving for you English people; and you know little of it. You do not know that we are preserving the English language for you as it was spoken centuries ago, and as you find it in your oldest writings. Scotticisms! Why, if ye were to read the prose of Mandeville or Wyclif, or the poetry of Robert of Brunne or Langdale, ye would find that our Scotticisms were the very pith and marrow of the English language. Ay; it is so."
+The innocent eyes express such profound interest that the Laird of Denny-mains almost forgets about the coming steamer, so anxious is he to crush us with a display of his erudition.
+"It is just remarkable," he says, "that your dictionaries should put down, as obsolete, words that are in common use all over the south of Scotland, where, as I say, the old Northumbrian English is preserved in its purity; and that ye should have learned people hunting up in Chaucer or Gower for the very speech that they might hear among the bits o' weans running about the Gallowgate or the Broomielaw. 'Wha's acht ye?' you say to one of them; and you think you are talking Scotch. No, no; acht is only the old English for possession: isn't 'Wha's acht ye?' shorter and pithier than 'To whom do you belong?'
+"Oh, certainly!" says the meek disciple: the recall of the boys from Surrey is obviously decided on.
+"And speir for inquire; and ferly for wonderful; and tyne for lose; and fey for about to die; and reek for smoke; and menseful for becoming; and belyve, and fere, and biggan, and such words. Ye call them Scotch? Oh, no, ma'am; they are English; ye find them in all the old English writers; and they are the best of English too; a great deal better than the Frenchified stuff that your southern English has become."
+Not for worlds would the Laird have wounded the patriotic sensitiveness of this gentle friend of his from the South; but indeed, she had surely nothing to complain of in his insisting to an Englishwoman on the value of thorough English?
+"I thought," says she, demurely, "that the Scotch had a good many French words in it."
+The Laird pretends not to hear: he is so deeply interested in the steamer which is now coming over the smooth waters of the bay. But, having announced that there are a great many people on board, he returns to his discourse.
+"Ah'm sure of this, too," says he, "that in the matter of pronunciation the Lowland Scotch have preserved the best English—you can see that faither, and twelmonth, and twa, and such words are nearer the original Anglo-Saxon——"
+His hearers had been taught to shudder at the phrase Anglo-Saxon—without exactly knowing why. But who could withstand the authority of the Laird? Moreover, we see relief drawing near; the steamer's paddles are throbbing in the still afternoon.
+"If ye turn to Piers the Plowman," continues the indefatigable Denny-mains, "ye will find Langdale writing—
+And a fewe Cruddes and Crayme.
+Why, it is the familiar phrase of our Scotch children!—Do ye think they would say curds? And then, fewe. I am not sure, but I imagine we Scotch are only making use of old English when we make certain forms of food plural. We say 'a few broth;' we speak of porridge as 'they.' Perhaps that is a survival, too, eh?"
+"Oh, yes, certainly. But please mind the ropes, sir," observes his humble pupil, careful of her master's physical safety. For at this moment the steamer is slowing into the quay; and the men have the ropes ready to fling ashore.
+"Not," remarks the Laird, prudently backing away from the edge of the pier, "that I would say anything of these matters to your young English friend; certainly not. No doubt she prefers the southern English she has been accustomed to. But, bless me! just to think that she should judge of our Scotch tongue by the way they Edinburgh bodies speak!"
+"It is sad, is it not?" remarks his companion—but all her attention is now fixed on the crowd of people swarming to the side of the steamer.
+"And, indeed," the Laird explains, to close the subject, "it is only a hobby of mine—only a hobby. Ye may have noticed that I do not use those words in my own speech, though I value them. No, I will not force any Scotch on the young leddy. As ah say, ah have often been taken for an Englishman maself, both at home and abroad."
+And now—and now—the great steamer is in at the quay; the gangways are run over; there is a thronging up the paddle-boxes; and eager faces on shore scan equally eager faces on board—each pair of eyes looking for that other pair of eyes to flash a glad recognition. And where is she—the flower of womankind—the possessor of all virtue and grace and courage—the wonder of the world? The Laird shares in our excitement. He, too, scans the crowd eagerly. He submits to be hustled by the porters; he hears nothing of the roaring of the steam; for is she not coming ashore at last? And we know—or guess—that he is looking out for some splendid creature—some Boadicea, with stately tread and imperious mien—some Jephtha's daughter, with proud death in her eyes—some Rosamond of our modern days, with a glory of loveliness on her face and hair. And we know that the master who has been lecturing us for half-an-hour on our disgraceful neglect of pure English will not shock the sensitive Southern ear by any harsh accent of the North; but will address her in beautiful and courtly strains, in tones such as Edinburgh never knew. Where is the queen of womankind, amid all this commonplace, hurrying, loquacious crowd?
+Forthwith the Laird, with a quick amazement in his eyes, sees a small and insignificant person—he only catches a glimpse of a black dress and a white face—suddenly clasped round in the warm embrace of her friend. He stares for a second; and then he exclaims—apparently to himself:—
+"Dear me! What a shilpit bit thing!"
+Pale—slight—delicate—tiny: surely such a master of idiomatic English cannot have forgotten the existence of these words. But this is all he cries to himself, in his surprise and wonder:—
+"Dear me! What a shilpit bit thing!"
+CHAPTER II.
+MARY AVON.
+The bright, frank laugh of her face!—the friendly, unhesitating, affectionate look in those soft black eyes! He forgot all about Rosamond and Boadicea when he was presented to this "shilpit" person. And when, instead of the usual ceremony of introduction, she bravely put her hand in his, and said she had often heard of him from their common friend, he did not notice that she was rather plain. He did not even stop to consider in what degree her Southern accent might be improved by residence amongst the preservers of pure English. He was anxious to know if she was not greatly tired. He hoped the sea had been smooth as the steamer came past Easdale. And her luggage—should he look after her luggage for her?
+But Miss Avon was an expert traveller, and quite competent to look after her own luggage. Even as he spoke, it was being hoisted on to the waggonette.
+"You will let me drive?" says she, eying critically the two shaggy, farm-looking animals.
+"Indeed I shall do nothing of the kind," says her hostess, promptly.
+But there was no disappointment at all on her face as we drove away through the golden evening—by the side of the murmuring shore, past the overhanging fir-wood, up and across the high land commanding a view of the wide western seas. There was instead a look of such intense delight that we knew, however silent the lips might be, that the bird-soul was singing within. Everything charmed her—the cool, sweet air, the scent of the sea-weed, the glow on the mountains out there in the west. And as she chattered her delight to us—like a bird escaped from its prison and glad to get into the sunlight and free air again—the Laird sate mute and listened. He watched the frank, bright, expressive face. He followed and responded to her every mood—with a sort of fond paternal indulgence that almost prompted him to take her hand. When she smiled, he laughed. When she talked seriously, he looked concerned. He was entirely forgetting that she was a "shilpit bit thing;" and he would have admitted that the Southern way of speaking English—although, no doubt, fallen away from the traditions of the Northumbrian dialect—had, after all, a certain music in it that made it pleasant to the ear.
+Up the hill, then, with a flourish for the last!—the dust rolling away in clouds behind us—the view over the Atlantic widening as we ascend. And here is Castle Osprey, as we have dubbed the place, with its wide open door, and its walls half hidden with tree-fuchsias, and its great rose-garden. Had Fair Rosamond herself come to Castle Osprey that evening, she could not have been waited on with greater solicitude than the Laird showed in assisting this "shilpit bit thing" to alight—though, indeed there was a slight stumble, of which no one took any notice at the time. He busied himself with her luggage quite unnecessarily. He suggested a cup of tea, though it wanted but fifteen minutes to dinner-time. He assured her that the glass was rising—which was not the case. And when she was being hurried off to her own room to prepare for dinner—by one who rules her household with a rod of iron—he had the effrontery to tell her to take her own time: dinner could wait. The man actually proposed to keep dinner waiting—in Castle Osprey.
+That this was love at first sight, who could doubt? And perhaps the nimble brain of one who was at this moment hurriedly dressing in her own room—and whom nature has constituted an indefatigable matchmaker—may have been considering whether this rich old bachelor might not marry, after all. And if he were to marry, why should not he marry the young lady in whom he seemed to have taken so sudden and warm an interest? As for her: Mary Avon was now two or three-and-twenty; she was not likely to prove attractive to young men; her small fortune was scarcely worth considering; she was almost alone in the world. Older men had married younger women. The Laird had no immediate relative to inherit Denny-mains and his very substantial fortune. And would they not see plenty of each other on board the yacht?
+But in her heart of hearts the schemer knew better. She knew that the romance-chapter in the Laird's life—and a bitter chapter it was—had been finished and closed and put away many and many a year ago. She knew how the great disappointment of his life had failed to sour him; how he was ready to share among friends and companions the large and generous heart that had been for a time laid at the feet of a jilt; how his keen and active interest, that might have been confined to his children and his children's children, was now devoted to a hundred things—the planting at Denny-mains, the great heresy case, the patronage of young artists, even the preservation of pure English, and what not. And that fortunate young gentleman—ostensibly his nephew—whom he had sent to Harrow and to Cambridge, who was now living a very easy life in the Middle Temple, and who would no doubt come in for Denny-mains? Well, we knew a little about that young man, too. We knew why the Laird, when he found that both the boy's father and mother were dead, adopted him, and educated him, and got him to call him uncle. He had taken under his care the son of the woman who had jilted him five-and-thirty years ago; the lad had his mother's eyes.
+And now we are assembled in the drawing-room—all except the new guest; and the glow of the sunset is shining in at the open windows. The Laird is eagerly proving to us that the change from the cold east winds of Edinburgh to the warm westerly winds of the Highlands must make an immediate change in the young lady's face—and declaring that she ought to go on board the yacht at once—-and asserting that the ladies' cabin on board the White Dove is the most beautiful little cabin he ever saw—when——
+When, behold! at the open door—meeting the glow of the sunshine—appears a figure—dressed all in black velvet, plain and unadorned but for a broad belt of gold fringe that comes round the neck and crosses the bosom. And above that again is a lot of white muslin stuff, on which the small, shapely, smooth-dressed head seems gently to rest. The plain black velvet dress gives a certain importance and substantiality to the otherwise slight figure; the broad fringe of gold glints and gleams as she moves towards us; but who can even think of these things when he meets the brave glance of Mary Avon's eyes? She was humming, as she came down the stair—
+O think na lang, lassie, though I gang awa;
+For I'll come and see ye, in spite o' them a',
+—we might have known it was the bird-soul come among us.
+Now the manner in which the Laird of Denny-mains set about capturing the affections of this innocent young thing—as he sate opposite her at dinner—would have merited severe reproof in one of less mature age; and might, indeed, have been followed by serious consequences but for the very decided manner in which Miss Avon showed that she could take care of herself. Whoever heard Mary Avon laugh would have been assured. And she did laugh a good deal; for the Laird, determined to amuse her, was relating a series of anecdotes which he called "good ones," and which seemed to have afforded great enjoyment to the people of the south of Scotland during the last century or so. There was in especial a Highland steward of a steamer about whom a vast number of these stories was told; and if the point was at times rather difficult to catch, who could fail to be tickled by the Laird's own and obvious enjoyment? "There was another good one, Miss Avon," he would say; and then the bare memory of the great facetiousness of the anecdote would break out in such half-suppressed guffaws as altogether to stop the current of the narrative. Miss Avon laughed—we could not quite tell whether it was at the Highland steward or the Laird—until the tears ran down her checks. Dinner was scarcely thought of. It was a disgraceful exhibition.
+"There was another good one about Homesh," said the Laird, vainly endeavouring to suppress his laughter. "He came up on deck one enormously hot day, and looked ashore, and saw some cattle standing knee-deep in a pool of water. Says he—ha! ha! ha!—ho! ho! ho!—says he—-says he—'A wish a wass a stot!'—he! he! he!—ho! ho! ho!"
+Of course we all laughed heartily, and Mary Avon more than any of us; but if she had gone down on her knees and sworn that she knew what the point of the story was, we should not have believed her. But the Laird was delighted. He went on with his good ones. The mythical Homesh and his idiotic adventures became portentous. The very servants could scarcely carry the dishes straight.
+But in the midst of it all the Laird suddenly let his knife and fork drop on his plate, and stared. Then he quickly exclaimed—
+"Bless me! lassie!"
+We saw in a second what had occasioned his alarm. The girl's face had become ghastly white; and she was almost falling away from her chair when her hostess, who happened to spring to her feet first, caught her, and held her, and called for water. What could it mean? Mary Avon was not of the sighing and fainting fraternity.
+And presently she came to herself—and faintly making apologies, would go from the room. It was her ankle, she murmured—with the face still white from pain. But when she tried to rise, she fell back again: the agony was too great. And so we had to carry her.
+About ten minutes thereafter the mistress of the house came back to the Laird, who had been sitting by himself, in great concern.
+"That girl! that girl!" she exclaims—and one might almost imagine there are tears in her eyes. "Can you fancy such a thing! She twists her ankle in getting down from the waggonette—brings back the old sprain—perhaps lames herself for life—and, in spite of the pain, sits here laughing and joking, so that she may not spoil our first evening together! Did you ever hear of such a thing! Sitting here laughing, with her ankle swelled so that I had to cut the boot off!"
+"Gracious me!" says the Laird; "is it as bad as that?"
+"And if she should become permanently lame—why—why——"
+But was she going to make an appeal direct to the owner of Denny-mains? If the younger men were not likely to marry a lame little white-faced girl, that was none of his business. The Laird's marrying days had departed five-and-thirty years before.
+However, we had to finish our dinner, somehow, in consideration to our elder guest. And then the surgeon came; and bound up the ankle hard and fast; and Miss Avon, with a thousand meek apologies for being so stupid, declared again and again that her foot would be all right in the morning, and that we must get ready to start. And when her friend assured her that this preliminary canter of the yacht might just as well be put off for a few days—until, for example, that young doctor from Edinburgh came who had been invited to go a proper cruise with us—her distress was so great that we had to promise to start next day punctually at ten. So she sent us down again to amuse the Laird.
+But hark! what is this we hear just as Denny-mains is having his whisky and hot water brought in? It is a gay voice humming on the stairs—
+By the margin of fair Zürich's waters.
+ 
+"That girl!" cries her hostess angrily, as she jumps to her feet.
+The door opens; and here is Mary Avon, with calm self-possession, making her way to a chair.
+"I knew you wouldn't believe me," she says coolly, "if I did not come down. I tell you my foot is as well as may be; and Dot-and-carry-one will get down to the yacht in the morning as easily as any of you. And that last story about Homesh," she says to the Laird, with a smile in the soft black eyes that must have made his heart jump. "Really, sir, you must tell me the ending of that story; it was so stupid of me!"
+"Shilpit" she may have been; but the Laird, for one, was beginning to believe that this girl had the courage and nerve of a dozen men.
+");
+                        
+
+        /* Clean up and leave.
+         */
+        helloVoice.deallocate();
+        System.exit(0);
+    }
+}

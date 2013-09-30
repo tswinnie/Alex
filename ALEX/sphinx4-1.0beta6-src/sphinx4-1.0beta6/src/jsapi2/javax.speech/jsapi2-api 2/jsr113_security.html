@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>JSAPI 2.0 Security</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+  <body>
+    <h1 class="SectionTitle">Java Speech API 2.0 Security</h1>
+
+    <h2 class="SectionTitle">Addendum to the Java Speech API 2.0 (JSR 113)</h2>
+
+    <h2 class="SectionTitle">Preface</h2>
+
+    <p>
+      This document, <i>Java Speech API 2.0 Security</i>, is an addendum to the
+      <a href="http://jcp.org/en/jsr/detail?id=113">Java Speech API 2.0</a>
+      (JSAPI 2.0) for the Java<sup>TM</sup> Platform, Micro Edition.
+      This addendum specifically addresses security for the
+      <a href="http://www.jcp.org/jsr/detail/118.jsp">
+      Mobile Information Device Profile (MIDP) version 2</a>
+      (JSR 118), the
+      <a href="http://www.jcp.org/jsr/detail/36.jsp">
+      Connected Device Configuration (CDC), Version 1</a>
+      (JSR 36),
+      and platforms using <code>java.security.Permissions</code> in general.
+    </p>
+    <p>
+      The terminology used herein is defined by the above specifications except where noted.
+    </p>
+
+    <h2 class="SectionTitle">Who Should use this Document</h2>
+
+    <p>
+      The audience for this document is the Java Community Process (JCP) experts,
+      implementers of JSAPI 2.0,
+      application developers using MIDP or CDC and JSAPI 2.0,
+      service providers deploying MIDP or CDC applications,
+      and wireless operators deploying the infrastructure to support MIDP or CDC devices.
+      This document specifically targets network operators, manufacturers,
+      and service and application providers operating in GSM and UMTS networks.
+    </p>
+
+    <h2 class="SectionTitle">Scope of this Document</h2>
+
+    <p>
+      This document identifies the security concerns of JSAPI 2.0 and the corresponding
+      security policy identifiers (permission names) when used in conjunction with
+      MIDP2, CDC, or platforms using <code>java.security.Permissions</code> in general.
+    </p>
+    <p>
+      The security framework and how it functions are specified and implemented by the
+      implementing platform (e.g., MIDP2 or CDC).
+    </p>
+    <p>
+      Implementations of JSAPI 2.0 must follow the security definitions for the
+      implementing platform as described in this document.
+    </p>
+
+    <h2 class="SectionTitle">General</h2>
+
+    <p>
+      The JSAPI 2.0 specification does not define an independent security framework.
+      Implementations of JSAPI 2.0 are subject to the security mechanisms of the
+      underlying implementing platform.
+      Some methods of JSAPI 2.0 specify that a <code>SecurityException</code>
+      will be thrown when called without the appropriate security permissions
+      from the caller.
+    </p>
+    <p>
+      An implementation MUST guarantee that:
+      <ol>
+        <li> the <code>SecurityException</code> is thrown when the caller does not have the
+        appropriate security permissions to execute the method; and </li>
+        <li> the method can be used when the appropriate permissions are
+        granted. </li>
+      </ol>
+    </p>
+
+    <a name="SecurityConcerns" />
+    <h2 class="SectionTitle">Security Concerns</h2>
+
+    <p>
+      The following table summarizes the security concerns for JSAPI 2.0.
+      In order to perform any security sensitive actions using JSAPI 2.0, the application
+      MUST be granted permission to do so.
+      <blockquote>
+        <table border cellpadding="2" class="Table">
+          <caption>JSAPI 2.0 Permissions</caption>
+          <tr>
+            <th>Security Concern</th>
+            <th>Permission</th>
+          </tr>
+          <tr>
+            <td>Access to <code>AudioSegment</code>s.</td>
+            <td><tt>javax.speech.AudioSegment.openInputStream</tt></td>
+          </tr>
+          <tr>
+            <td>Changes to default audio behavior.</td>
+            <td><tt>javax.speech.AudioManager.control</tt></td>
+          </tr>
+          <tr>
+            <td>Conversion of audio into text.</td>
+            <td><tt>javax.speech.recognition.Recognizer.allocate</tt></td>
+          </tr>
+          <tr>
+            <td>Application additions to default Engine support.</td>
+            <td><tt>javax.speech.EngineManager.registerEngineListFactory</tt></td>
+          </tr>
+          <tr>
+            <td>Manipulation of speaker information.</td>
+            <td><tt>javax.speech.recognition.SpeakerManager</tt></td>
+          </tr>
+          <tr>
+            <td>Access to speaker information.</td>
+            <td><tt>javax.speech.recognition.SpeakerProfile</tt></td>
+          </tr>
+          <tr>
+            <td>Changes to models of tokens.</td>
+            <td><tt>javax.speech.recognition.FinalResult.tokenCorrection</tt></td>
+          </tr>
+          <tr>
+            <td>Updates to default vocabulary.</td>
+            <td><tt>javax.speech.VocabularyManager.update</tt></td>
+          </tr>
+        </table>
+      </blockquote>
+    </p>
+    <p>
+      The following table shows the correspondence between a permission,
+      the corresponding methods that require the permission in JSAPI 2.0,
+      and the Function Group as defined in MIDP2.  The Function Group mapping
+      provides a user-friendly way of indicating acceptance at a higher level
+      than the individual permissions.
+      <blockquote>
+        <table border cellpadding="2" class="Table">
+          <caption>JSAPI 2.0 Permissions and Methods</caption>
+          <tr>
+            <th>Permission</th>
+            <th>Permitted API Calls</th>
+            <th>Function Group</th>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.AudioSegment.openInputStream</tt></td>
+            <td><code>AudioSegment.openInputStream()</code></td>
+            <td>Multimedia recording</td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.AudioManager.control</tt></td>
+            <td><code>AudioManager.setMediaLocator()</code><br>
+              <code>AudioManager.audioStart()</code><br>
+            <code>AudioManager.audioStop()</code></td>
+            <td>Multimedia recording</td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.EngineManager.registerEngineListFactory</tt></td>
+            <td><code>EngineManager.registerEngineListFactory()</code></td>
+            <td>Multimedia recording</td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.Recognizer.allocate</tt></td>
+            <td><code>Recognizer.allocate()</code></td>
+            <td>Multimedia recording</td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.SpeakerManager</tt></td>
+            <td><code>Recognizer.getSpeakerManager()</code></td>
+            <td>Write User Data Access</td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.SpeakerProfile</tt></td>
+            <td><code>RecognizerMode.getSpeakerProfiles()</code></td>
+            <td>Read User Data Access</td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.FinalResult.tokenCorrection</tt></td>
+            <td><code>FinalResult.tokenCorrection()</code></td>
+            <td>Write User Data Access</td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.VocabularyManager.update</tt></td>
+            <td><code>VocabularyManager.addWord()</code><br>
+              <code>VocabularyManager.addWords()</code><br>
+              <code>VocabularyManager.removeWord()</code><br>
+            <code>VocabularyManager.removeWords()</code></td>
+            <td>Write User Data Access</td>
+          </tr>
+        </table>
+      </blockquote>
+    </p>
+
+    <p>
+      Implementations using security permissions based on
+      <code>java.security.Permission</code> (e.g., CDC)
+      must include the class <code>javax.speech.SpeechPermission</code>.
+      In this case, an "action" is used rather than a permission.
+      Implementations of the methods corresponding to the permissions MUST perform
+      permission checks.
+      <blockquote>
+        <table border cellpadding="2" class="Table">
+          <caption>JSAPI 2.0 Actions corrsponding to Permissions</caption>
+          <tr>
+            <th>Permission</th>
+            <th>Action</th>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.AudioSegment.openInputStream</tt></td>
+            <td><code>"AudioSegment.openInputStream"</code></td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.AudioManager.control</tt></td>
+            <td><code>"AudioManager.control"</code></td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.Recognizer.allocate</tt></td>
+            <td><code>"Recognizer.allocate"</code></td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.EngineManager.registerEngineListFactory</tt></td>
+            <td><code>"EngineManager.registerEngineListFactory"</code></td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.SpeakerManager</tt></td>
+            <td><code>"SpeakerManager"</code></td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.SpeakerProfile</tt></td>
+            <td><code>"SpeakerProfile"</code></td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.recognition.FinalResult.tokenCorrection</tt></td>
+            <td><code>"FinalResult.tokenCorrection"</code></td>
+          </tr>
+          <tr>
+            <td><tt>javax.speech.VocabularyManager.update</tt></td>
+            <td><code>"VocabularyManager.update"</code></td>
+          </tr>
+        </table>
+      </blockquote>
+    </p>
+
+    <p>
+      In addition to the permissions defined by JSAPI 2.0, other permissions may
+      be needed as well.
+      For example, if an implementation uses JSR 135 as part of
+      the <code>AudioManager</code> implementation, then security settings
+      related to JSR 135 may affect the JSAPI 2.0 implementation.
+      Also, for JSAPI 2.0 implemented on MIDP2, methods that access content on
+      an HTTP server MUST follow the MIDP2 security practices for network access.
+    </p>
+
+    <h2 class="SectionTitle">References</h2>
+    <ul>
+      <li><a href="http://jcp.org/en/jsr/detail?id=30">
+      Connected, Limited Device Configuration (CLDC)</a> (JSR 30)</li>
+      <li><a href="http://jcp.org/en/jsr/detail?id=37">
+      Mobile Information Device Profile (MIDP)</a> (JSR 37)</li>
+      <li><a href="http://jcp.org/en/jsr/detail?id=118">
+      Mobile Information Device Profile 2.0 (MIDP2)</a> (JSR 118)</li>
+      <li><a href="http://jcp.org/en/jsr/detail?id=36">
+      Connected Device Configuration (CDC)</a> (JSR 36)</li>
+      <li><a href="http://jcp.org/en/jsr/detail?id=218">
+      Connected Device Configuration (CDC) 1.1</a> (JSR 218)</li>
+      <li><a href="http://jcp.org/aboutJava/communityprocess/maintenance/jsr118/MIDP_2.0.1_MR_addendum.pdf">
+      The Recommended Security Policy for GSM/UMTS Compliant Devices</a></li>
+      <li><a href="http://jcp.org/en/jsr/detail?id=135">Mobile Media API (MMAPI)</a> (JSR 135)</li>
+    </ul>
+  </body>
+</html>

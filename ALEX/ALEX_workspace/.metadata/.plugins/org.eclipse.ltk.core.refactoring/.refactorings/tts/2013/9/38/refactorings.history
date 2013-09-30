@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;FreeTTSHelloWorld.java&apos; to &apos;alle/src/edu.cmu.sphinx.demo.helloworld&apos;&#x0A;- Original project: &apos;tts&apos;&#x0A;- Destination element: &apos;alle/src/edu.cmu.sphinx.demo.helloworld&apos;&#x0A;- Original element: &apos;FreeTTSHelloWorld.java&apos;" description="Copy compilation unit" destination="=alle/src&lt;edu.cmu.sphinx.demo.helloworld" element1="/src&lt;{FreeTTSHelloWorld.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1379532230973" units="1" version="1.0"/>
+</session>

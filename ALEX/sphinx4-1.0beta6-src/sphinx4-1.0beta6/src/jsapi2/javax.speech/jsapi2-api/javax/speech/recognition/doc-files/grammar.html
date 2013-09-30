@@ -1,0 +1,309 @@
+<html>
+<head>
+<title>Grammar URIs</title>
+</head>
+<body>
+
+<h2>Loading a grammar from a server or file:</h2>
+
+<pre><code>    String grammarURI = "http://www.jsapi2.org/examples/grammar/greeting.xml";
+    <a href="RuleGrammar.html">RuleGrammar</a> grammar = recognizer.<a href="Recognizer.html#loadRuleGrammarMarkup(java.lang.String,%20java.lang.String)">loadRuleGrammar</a>(grammarURI);</code></pre>
+
+<p>
+The URI "<code>http://www.jsapi2.org/examples/grammar/greeting.xml</code>" specifies
+the resource from which the grammar will be downloaded.  The recognizer will
+<em>attempt</em> to open a connection to the "<code>example.com</code>" server,
+download the grammar, and interpret its contents.  By default, the format of
+the grammar is assumed to be "<code>application/srgs+xml</code>" <a href="#ref-1">[1]</a>.
+
+<p>
+The URI also serves as the grammar's identifier:
+
+<ul>
+<li>
+<code>grammar.<a href="Grammar.html#getURI()">getURI</a>()</code> returns
+"<code>http://www.jsapi2.org/examples/grammar/greeting.xml</code>".
+
+<li>
+<code>recognizer.<a href="Recognizer.html#getGrammar(java.lang.String)">getGrammar</a>("http://www.jsapi2.org/examples/grammar/greeting.xml")</code>
+returns the <code>RuleGrammar</code> object that was loaded.
+
+<li>
+You may use this URI to reference this grammar's rules from other grammars.
+</ul>
+
+<p>
+Note that since JSAPI2 is designed to run on small devices that may or may not
+have network connectivity (or where the user might have to pay to access the
+network), the "<code>http://</code>" protocol will not necessarily be
+available.  Many devices do not have hard-drives or file systems (or security
+concerns that would prevent your application from accessing them), so the
+"<code>file:/</code>" protocol is often not available either.  In fact, JSAPI2
+does not require that any specific protocol schemes to be available on a
+device, which can severely limit your ability to build portable applications
+that load grammars in this manner.
+
+
+
+<h2>Loading a grammar from a system resource:</h2>
+
+<p>
+On limited devices, the only guaranteed way (ignoring security restrictions) to
+load grammars from external resources is to load them from the system
+<code>CLASSPATH</code>, using
+<code>java.lang.Class.getResourceAsStream(String&nbsp;name)</code>.  Since
+there is no standard way to construct a URI that represents a system resource,
+this case is handled specially.  <em>Any URI that is not absolute is
+interpreted as a reference to a system resource.</em>
+
+<p>For example, "<code>http://www.jsapi2.org/examples/grammar/greeting.xml</code>" is
+an absolute URI, by definition, because it has a scheme ("<code>http:</code>").
+On the other hand, the URI
+"<code>/org/jsapi2/examples/grammar/greeting.xml</code>" is <em>not</em> an
+absolute URI because it does not have a scheme.  Such a URI is, by definition,
+<em>relative</em>, and JSAPI2 defines it as being relative to the application
+running in the Java virtual machine.  This means it will be treated as a system
+resource and loaded from the <code>CLASSPATH</code> (most likely from the same
+<code>.jar</code> file containing the application).
+
+
+<pre><code>    String grammarURI = "/org/jsapi2/examples/grammar/greeting.xml";
+    <a href="RuleGrammar.html">RuleGrammar</a> grammar = recognizer.<a href="Recognizer.html#loadRuleGrammarMarkup(java.lang.String,%20java.lang.String)">loadRuleGrammar</a>(grammarURI);</code></pre>
+
+
+
+<h2>Loading a grammar from other external resources:</h2>
+
+<p>
+For other types of external resources, you may construct your own
+<code>Reader</code> to provide the recognizer with grammar markup.  This allows
+you to load grammars from databases, a MIDP <code>RecordStore</code>, or
+downloaded over other types of connections not representable as URIs.
+
+<pre><code>    String arbitraryGrammarURI = "foo:/uri/to/greeting.xml";
+    Reader reader = ...;
+
+    recognizer.<a href="Recognizer.html#loadRuleGrammar(java.io.Reader,%20java.lang.String)">loadRuleGrammar</a>(reader, arbitraryGrammarURI);</code></pre>
+
+<p>
+Note the second argument to <code>loadRuleGrammar</code>: it is an
+<em>arbitrary</em> URI that identifies the loaded grammar (the only restriction
+being that it uses valid URI syntax <a href="#ref-2">[2]</a>).
+
+<p>
+For self-contained grammars, the choice of URI here is not very important,
+except to avoid conflicts with other grammars.  But for grammars that 
+<a href="#grammar-references">reference rules from other grammars</a>, any
+relative references will be resolved against this URI, so it is important to
+pick a standard naming convention for the grammars in your application.
+Specifying a URI with an otherwise valid scheme, such as
+"<code>http://...</code>" (or without a scheme, as a reference to a system
+resource) can be useful if you have relative references in the grammar that
+need to be resolved and loaded.
+
+
+
+<h2>Defining a grammar with a <code>String</code>:</h2>
+
+<p>
+Both of the previous methods do not allow you to modify the grammar before
+loading it.  One way to define a grammar on-the-fly is to construct a
+<code>String</code> containing the grammar's XML markup and load it like this:
+
+<pre><code>    String grammarXML =
+        "&lt;grammar root='greeting'&gt;" +
+            "&lt;rule id='greeting' scope='public'&gt;" +
+                "&lt;one-of&gt;" +
+                    "&lt;item&gt; hello &lt;/item&gt;" +
+                    "&lt;item&gt; goodbye &lt;/item&gt;" +
+                "&lt;/one-of&gt;" +
+                "&lt;ruleref uri='#name'/&gt;" +
+            "&lt;/rule&gt;" +
+            "&lt;rule id='name' scope='public'&gt;" +
+                "&lt;one-of&gt;" +
+                    "&lt;item&gt; John Doe &lt;/item&gt;" +
+                    "&lt;item&gt; Bill Gates &lt;/item&gt;" +
+                "&lt;/one-of&gt;" +
+            "&lt;/rule&gt;" +
+        "&lt;/grammar&gt;";
+
+    String arbitraryGrammarURI = "foo:/uri/to/greeting.xml";
+        
+    RuleGrammar grammar = recognizer.<a href="Recognizer.html#loadRuleGrammarMarkup(java.lang.String,%20java.lang.String)">loadRuleGrammarMarkup</a>(grammarXML, arbitraryGrammarURI);</code></pre>
+
+<p>
+(Of course, using a <code>StringBuffer</code> is recommended over string
+concatenation for all but the simplest grammars.)
+
+<h2>Building grammars programmatically:</h2>
+
+<p>
+When building a grammar piece-by-piece, it's generally safer to construct it
+using <code><a href="RuleComponent.html">RuleComponent</a></code> objects instead of generating
+XML markup, especially if parts of your grammar come from user input that could
+contain illegal XML characters.  The following code has the same affect as the
+grammar loaded from the string above, but is likely more efficient because it
+does not require the recognizer to parse XML:
+
+<pre><code>    String arbitraryGrammarURI = "foo:/uri/to/greeting.xml";
+
+    RuleGrammar grammar = recognizer.<a href="Recognizer.html#createRuleGrammarMarkup(java.lang.String,%20java.lang.String)"><em>createRuleGrammar</em></a>(arbitraryGrammarURI);
+
+    grammar.setRule("greeting",
+        new <a href="RuleSequence.html">RuleSequence</a>(new RuleComponent[] {
+            new <a href="RuleAlternatives.html">RuleAlternatives</a>(new RuleComponent[] {
+                new <a href="RuleToken.html">RuleToken</a>("hello"),
+                new RuleToken("goodbye")}),
+            new <a href="RuleReference.html">RuleReference</a>("#name")}),
+        RuleGrammar.<a href="RuleGrammar#PUBLIC_SCOPE">PUBLIC_SCOPE</a>);
+
+    grammar.setRule("name",
+        new RuleAlternatives(new RuleComponent[] {
+            new RuleToken("John Doe"),
+            new RuleToken("Bill Gates")}),
+        RuleGrammar.PUBLIC_SCOPE);</code></pre>
+
+
+
+<h3><a name="grammar-references">Referencing other grammars</a>:</h3>
+
+<p>
+We've already seen the use of one form of "reference" in a grammar &mdash;
+referencing another rule in the same grammar, using
+
+<pre><code>    &lt;ruleref uri="#name"/&gt;</code></pre>
+
+or 
+
+<pre><code>    new RuleReference("#name")</code></pre>
+
+<p>
+In this case, "<code>#name</code>" is a URI whose fragment (the part after the
+"<code>#</code>") identifies the target rule.  Because the URI in this example
+contains <em>only</em> the fragment, the target rule is assumed to be part of
+the same grammar that contains the reference.
+
+<p>
+It's often useful to reference rules from <em>other</em> grammars.  For
+example, grammars for dates, numbers, currencies, or cities can be shared
+between different applications, and it's convenient (and much more efficient)
+to avoid redefining these grammars in every instance that they are used.  Often
+these grammars are "built-in" to the recognizer implementation (but JSAPI2 does
+not define any such built-in grammars).
+
+<p>
+To reference a rule from a "shared" grammar, you need two things:
+
+<ul>
+<li>
+the URI of the grammar,
+<li>
+and the name of the target rule, which must be declared "public", meaning the
+rule was declared with
+<code>&lt;rule&nbsp;id="&lt;name&gt;"&nbsp;scope="public"&gt;</code> or
+<code>RuleGrammar.setRule(&lt;name&gt;,&nbsp;...,&nbsp;RuleGrammar.PUBLIC_SCOPE)</code>.
+Private rules can only be accessed from within the same grammar.
+</ul>
+
+<p>
+Here is an example &mdash; note the "<code>&lt;ruleref&gt;</code>":
+
+<pre><code>    String grammarXML =
+        "&lt;grammar root='travel'&gt;" +
+            "&lt;rule id='travel' scope='public'&gt;" +
+                "&lt;item&gt; I want to &lt;/item&gt;" +
+                "&lt;one-of&gt;" +
+                    "&lt;item&gt; fly &lt;/item&gt;" +
+                    "&lt;item&gt; take the train &lt;/item&gt;" +
+                    "&lt;item&gt; drive &lt;/item&gt;" +
+                "&lt;/one-of&gt;" +
+                "&lt;item&gt; to &lt;/item&gt;" +
+                "<em>&lt;ruleref uri='http://www.jsapi2.org/examples/common/cities.xml#city'/&gt;</em>" +
+            "&lt;/rule&gt;" +
+        "&lt;/grammar&gt;";
+
+    String arbitraryGrammarURI = "http://www.jsapi2.org/examples/grammar/greeting.xml";
+
+    recognizer.loadRuleGrammarMarkup(grammarXML, arbitraryGrammarURI);</code></pre>
+
+<p>
+In this case, the URI we've defined for our grammar, again, is
+"<code>http://www.jsapi2.org/examples/grammar/greeting.xml</code>", and the grammar
+we're referencing is called "<code>cities.xml</code>".  The
+"<code>#city</code>" fragment specifies the rule within
+"<code>cities.xml</code>" that we are targeting. When our grammar is loaded by
+the recognizer, it will attempt to load
+"<code>http://www.jsapi2.org/examples/common/cities.xml</code>", too.  If you
+don't want the recognizer to attempt to download the the referenced grammar,
+you must load it <em>first</em> using one of the above methods; the recognizer
+will not attempt to reload it by default.
+<p>
+You can more precisely control the process of loading external grammars with
+an advanced variant of
+<code><a href="Recognizer.html#loadRuleGrammar(java.io.Reader,%20java.lang.String,%20boolean,%20boolean,%20java.util.Vector)">loadRuleGrammar</a></code>;
+see the documentation for details.  Also, if you construct a grammar
+programmatically with <code>Recognizer.createRuleGrammar</code> (see above),
+any external grammars referenced by <code>RuleReference</code> objects will not
+be resolved or loaded until the grammar is committed with
+<code>Recognizer.<a href="Recognizer.html#commitChanges()">commitChanges</a>()</code>.
+
+<h3>Relative references:</h3>
+
+<p>
+Notice that the URI to "<code>cities.xml</code>" is identical to the arbitrary
+URI we defined for our "<code>grammars.xml</code>" for all but the last two
+portions of the path.  To make things easier, the URI you use to reference the
+grammar can be <em>relative</em>.  For example,
+
+<pre><code>    &lt;ruleref uri="<em>../common/cities.xml#city</em>"/&gt;</code></pre> or
+
+<pre><code>    new RuleReference("<em>../common/cities.xml#city</em>")</code></pre>
+
+<p>
+This new URI is resolved against the URI for the grammar containing the
+reference, which is known as the "base" URI:
+
+<ul>
+<li>
+In this example, the "base" URI is
+"<code>http://www.jsapi2.org/examples/grammar/greeting.xml</code>".
+<li>
+The "relative" URI is "<code>../common/cities.xml#city</code>".
+<li>
+The two URIs are concatenated to yield
+"<code>http://www.jsapi2.org/examples/grammar/../common/cities.xml#city</code>".
+<li>
+The "<code>myapp/../</code>" section is removed, yielding the correct URI for
+the target grammar,
+"<code>http://www.jsapi2.org/examples/common/cities.xml#city</code>".
+</ul>
+
+<p>
+Using relative URIs allows you to define "packages" of grammars that can be
+easily moved from place-to-place or reused in other applications.  If the main
+grammar was loaded from a system resource with a URI such as
+"<code>/org/jsapi2/examples/grammar/greeting.xml</code>", then the
+"<code>../common/cities.xml</code>" would also be loaded as a system resource,
+which is extremely convenient if your grammars use the same package-naming
+conventions as your Java classes.
+
+
+<h2>References:</h2>
+
+<ol>
+<li>
+<a name="ref-1">Speech Recognition Grammar Specification, Version 1.0</a>:
+<a href="http://www.w3.org/TR/speech-grammar/">http://www.w3.org/TR/speech-grammar/</a>
+<ul>
+<li>
+<a name="ref-1.2">Section 2.2.2: External References by URI</a>:
+<a href="http://www.w3.org/TR/speech-grammar/#S2.2.2">http://www.w3.org/TR/speech-grammar/#S2.2.2</a>
+</ul>
+
+<li>
+<a name="ref-2">RFC 2396: Uniform Resource Identifiers</a>:
+<a href="http://www.ietf.org/rfc/rfc2396.txt">http://www.ietf.org/rfc/rfc2396.txt</a>
+</ol>
+</body>
+</html>
+

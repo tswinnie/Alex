@@ -1,0 +1,13 @@
+package edu.cmu.sphinx.demo.helloworld;
+
+public class Display {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

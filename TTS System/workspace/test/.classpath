@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/Client.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/EmacspeakServer.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/FreeTTSEmacspeakServer.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/FreeTTSHelloWorld.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/HelloWorld.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/JTime.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/MixedVoices.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/Player.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/Server.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/bin/WebStartClock.jar"/>
+	<classpathentry kind="lib" path="/Users/tyroneswinnie/Desktop/TTS System/freetts-1.2.2-bin (1)/freetts-1.2/lib/freetts.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

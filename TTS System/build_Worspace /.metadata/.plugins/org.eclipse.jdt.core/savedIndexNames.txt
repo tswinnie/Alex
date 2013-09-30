@@ -1,0 +1,20 @@
+INDEX VERSION 1.126+/Users/tyroneswinnie/Desktop/TTS System/build_Worspace /.metadata/.plugins/org.eclipse.jdt.core
+2483068400.index
+3720610473.index
+2040326916.index
+2934105090.index
+2888780616.index
+3118136713.index
+3038369563.index
+1070090913.index
+4273139920.index
+2377041959.index
+3572569140.index
+3861869564.index
+4197627632.index
+1683184873.index
+2663519450.index
+2517078169.index
+3719686228.index
+799754836.index
+213536029.index
